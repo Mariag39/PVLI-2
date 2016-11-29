@@ -48,14 +48,20 @@ battle.on('turn', function (data) {
     monstersList.innerHTML = "";
     for (var i in list){
         aux = this._charactersById[list[i]];
-         render = '<li data-chara- id="'+list[i]+'">'+aux.name+'(HP: <strong>'+aux.hp+'</strong>/'+aux.maxHp+', MP: <strong>'+aux.mp+'</strong>/'+aux.maxMp+')</li>';
-       if (aux.party === 'heroes'){
+        var render = '<li data-chara- id="'+list[i]+'">'+aux.name+'(HP: <strong>'+aux.hp+'</strong>/'+aux.maxHp+', MP: <strong>'+aux.mp+'</strong>/'+aux.maxMp+')</li>';
+    
+     if (aux.party === 'heroes'){
+
          heroesList.innerHTML += render;
+        
        }
        else {
+        
         monstersList.innerHTML += render;
+    
        }
 }
+   
     // TODO: highlight current character
     var active = document.querySelector('#' + data.activeCharacterId);
     active.classList.add('active');
@@ -80,7 +86,7 @@ battle.on('turn', function (data) {
     //console.log(this._turns.list.filter(this._charactersById.isAlive()));
    
     for(var i in char){
-         render = '<li><label><input type="radio" name="target" value="'+i+'" required> '+i+'</label></li>';
+         var render = '<li><label><input type="radio" name="target" value="'+i+'" required> '+i+'</label></li>';
          targets.innerHTML += render;
     }
     
@@ -97,7 +103,7 @@ battle.on('turn', function (data) {
   }
   
     for(var i in spells){
-        render = '<li><label><input type="radio" name="spell" value="'+i+'" required> '+i+'</label></li>';
+        var render = '<li><label><input type="radio" name="spell" value="'+i+'" required> '+i+'</label></li>';
         spellinfo.innerHTML += render;
       }
       
@@ -112,12 +118,26 @@ function isEmpty(obj){
 battle.on('info', function (data) {
     console.log('INFO', data);
     // TODO: display turn info in the #battle-info panel
-   // infoPanel.style.display = 'inline';
-   // var effect = data.effect;
-   // var effectsTxt = prettifyEffect(effect || {});
-   // render = '<p id="battle-info">'+ data.activeCharacterId+' '+ data.action+' with '+data.scrollName+' on ' +data.targetId +
-   // ' and caused ' + effectsTxt+'</p>';
-   // infoPanel.innerHTML += render;
+    infoPanel.style.display = 'inline';
+    var effect = data.effect;
+    var render;
+    var effectsTxt = prettifyEffect(effect || {});
+    infoPanel.innerHTML = "";
+    if(data.action === 'attack' && data.success){
+     render = '<p id="battle-info">'+ data.activeCharacterId+' attacked ' +data.targetId +
+    ' and caused ' + effectsTxt+'</p>';
+}
+    else if(data.action === 'cast' && data.success){
+    render = '<p id="battle-info">'+ data.activeCharacterId+' casted '+data.scrollName+' on ' +data.targetId +
+    ' and caused ' + effectsTxt+'</p>'; 
+}
+    else if(data.action === 'defend'){
+     render = '<p id="battle-info">'+ data.activeCharacterId+' defended'; 
+}
+    else if(!data.success){
+     render = '<p id="battle-info">'+ data.activeCharacterId+' failed'; 
+    }
+    infoPanel.innerHTML += render;
 });
 
 battle.on('end', function (data) {
