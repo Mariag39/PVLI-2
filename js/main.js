@@ -71,7 +71,8 @@ battle.on('turn', function (data) {
        
     }
     targetForm.style.display = 'none';
-    var char = this._charactersById; //el orden importa?? hay que poner esto aquí??
+    var char = this._charactersById; //cambiar esto para que salga lo de showTargets
+    //console.log(this._turns.list.filter(this._charactersById.isAlive()));
     var targets = targetForm.querySelector('.choices');
     for(var i in char){
         var li = document.createElement('li');
@@ -79,12 +80,39 @@ battle.on('turn', function (data) {
          targets.appendChild(li);
     }
     
+    spellForm.style.display = 'none';
+
+    var spells = this._grimoires[this._activeCharacter.party];
+    var spellinfo = spellForm.querySelector('.choices');
+     
+      var button = spellForm.querySelector('button');
+    if(isEmpty(spells))
+      button.disabled = true;
+     else{
+      button.disabled = false;
+  }
+    for(var i in spells){
+        var li = document.createElement('li');
+        li.innerHTML = '<label><input type="radio" name="spell" value="'+i+'" required> '+i+'</label>';
+        spellinfo.appendChild(li);
+      }
+    
 });
+
+function isEmpty(obj){
+    for(var i in obj){ return false}
+        return true;
+}
 
 battle.on('info', function (data) {
     console.log('INFO', data);
-    console.log(actionForm);
     // TODO: display turn info in the #battle-info panel
+   // infoPanel.style.display = 'inline';
+   // var effect = data.effect;
+   // var effectsTxt = prettifyEffect(effect || {});
+   // render = '<p id="battle-info">'+ data.activeCharacterId+' '+ data.action+' with '+data.scrollName+' on ' +data.targetId +
+   // ' and caused ' + effectsTxt+'</p>';
+   // infoPanel.innerHTML += render;
 });
 
 battle.on('end', function (data) {
@@ -112,7 +140,11 @@ window.onload = function () {
         // TODO: hide this menu
         actionForm.style.display = 'none';
         // TODO: go to either select target menu, or to the select spell menu
+         if(action === 'cast'){
+            spellForm.style.display = 'block';
+         }else{
          targetForm.style.display = 'block';
+     }
     });
 
     targetForm.addEventListener('submit', function (evt) {
@@ -129,7 +161,7 @@ window.onload = function () {
     .addEventListener('click', function (evt) {
         evt.preventDefault();
         // TODO: cancel current battle options
-        battle.options.cancel;
+        battle.options.cancel();
         // TODO: hide this form
         targetForm.style.display = 'none';
         // TODO: go to select action menu
@@ -139,16 +171,24 @@ window.onload = function () {
     spellForm.addEventListener('submit', function (evt) {
         evt.preventDefault();
         // TODO: select the spell chosen by the player
+        var spell = spellForm.elements['spell'].value;
+
+        battle.options.select(spell);
         // TODO: hide this menu
+        spellForm.style.display = 'none';
         // TODO: go to select target menu
+        targetForm.style.display = 'block';
     });
 
     spellForm.querySelector('.cancel')
     .addEventListener('click', function (evt) {
         evt.preventDefault();
         // TODO: cancel current battle options
+        battle.options.cancel();
         // TODO: hide this form
+         spellForm.style.display = 'none';
         // TODO: go to select action menu
+         actionForm.style.display = 'block';
     });
 
     battle.start();
