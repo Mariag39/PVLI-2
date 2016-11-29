@@ -44,58 +44,63 @@ battle.on('turn', function (data) {
     var heroesList = listChara[0];
     var monstersList = listChara [1];
     var aux;
+    heroesList.innerHTML = "";
+    monstersList.innerHTML = "";
     for (var i in list){
         aux = this._charactersById[list[i]];
-         var li = document.createElement('li');
-         li.innerHTML = aux.name+'(HP: <strong>'+aux.hp+'</strong>/'+aux.maxHp+', MP: <strong>'+aux.mp+'</strong>/'+aux.maxMp+')';
-         li.dataset.charaid = list[i];
+         render = '<li data-chara- id="'+list[i]+'">'+aux.name+'(HP: <strong>'+aux.hp+'</strong>/'+aux.maxHp+', MP: <strong>'+aux.mp+'</strong>/'+aux.maxMp+')</li>';
        if (aux.party === 'heroes'){
-         heroesList.appendChild(li);
+         heroesList.innerHTML += render;
        }
        else {
-        monstersList.appendChild(li);
+        monstersList.innerHTML += render;
        }
 }
     // TODO: highlight current character
-    var active = document.querySelector('[data-charaid="'+data.activeCharacterId+'"]');
-    active.classList.add("active");
+    var active = document.querySelector('#' + data.activeCharacterId);
+    active.classList.add('active');
     
     // TODO: show battle actions form
     actionForm.style.display = 'inline';
     var actions = actionForm.querySelector('.choices');
+    actions.innerHTML = "";
     var options = this.options.current._group;
+    
     for(var i in options){
-        var li = document.createElement('li');
-        li.innerHTML = '<label><input type="radio" name="option" value="'+i+'" required> '+i+'</label>';
-        actions.appendChild(li);
+        render = '<li><label><input type="radio" name="option" value="'+i+'" required> '+i+'</label></li>';
+        actions.innerHTML += render;
        
     }
     targetForm.style.display = 'none';
-    var char = this._charactersById; //cambiar esto para que salga lo de showTargets
-    //console.log(this._turns.list.filter(this._charactersById.isAlive()));
     var targets = targetForm.querySelector('.choices');
+    targets.innerHTML = "";
+    //this._charactersById
+    var char = this._charactersById;
+     //cambiar esto para que salga lo de showTargets
+    //console.log(this._turns.list.filter(this._charactersById.isAlive()));
+   
     for(var i in char){
-        var li = document.createElement('li');
-         li.innerHTML = '<label><input type="radio" name="target" value="'+i+'" required> '+i+'</label>';
-         targets.appendChild(li);
+         render = '<li><label><input type="radio" name="target" value="'+i+'" required> '+i+'</label></li>';
+         targets.innerHTML += render;
     }
     
     spellForm.style.display = 'none';
 
     var spells = this._grimoires[this._activeCharacter.party];
     var spellinfo = spellForm.querySelector('.choices');
-     
-      var button = spellForm.querySelector('button');
+    spellinfo.innerHTML = "";
+    var button = spellForm.querySelector('button');
     if(isEmpty(spells))
       button.disabled = true;
      else{
       button.disabled = false;
   }
+  
     for(var i in spells){
-        var li = document.createElement('li');
-        li.innerHTML = '<label><input type="radio" name="spell" value="'+i+'" required> '+i+'</label>';
-        spellinfo.appendChild(li);
+        render = '<li><label><input type="radio" name="spell" value="'+i+'" required> '+i+'</label></li>';
+        spellinfo.innerHTML += render;
       }
+      
     
 });
 
@@ -138,13 +143,17 @@ window.onload = function () {
        // console.log(action);
 
         // TODO: hide this menu
-        actionForm.style.display = 'none';
+       //
         // TODO: go to either select target menu, or to the select spell menu
          if(action === 'cast'){
+             actionForm.style.display = 'none';
             spellForm.style.display = 'block';
          }else{
+             actionForm.style.display = 'none';
          targetForm.style.display = 'block';
+
      }
+     
     });
 
     targetForm.addEventListener('submit', function (evt) {
@@ -153,7 +162,8 @@ window.onload = function () {
         var target = targetForm.elements['target'].value;
         battle.options.select(target);
         // TODO: hide this menu
-          targetForm.style.display = 'none';
+         targetForm.style.display = 'none';
+         actionForm.style.display = 'block';
 
     });
 
@@ -166,6 +176,7 @@ window.onload = function () {
         targetForm.style.display = 'none';
         // TODO: go to select action menu
         actionForm.style.display = 'block';
+        
     });
 
     spellForm.addEventListener('submit', function (evt) {
@@ -178,6 +189,7 @@ window.onload = function () {
         spellForm.style.display = 'none';
         // TODO: go to select target menu
         targetForm.style.display = 'block';
+        
     });
 
     spellForm.querySelector('.cancel')
@@ -189,6 +201,7 @@ window.onload = function () {
          spellForm.style.display = 'none';
         // TODO: go to select action menu
          actionForm.style.display = 'block';
+         
     });
 
     battle.start();
