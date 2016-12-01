@@ -39,7 +39,7 @@ battle.on('turn', function (data) {
     console.log('TURN', data);
 
     // TODO: render the characters
-    var list = Object.keys(this._charactersById);
+    var list = Object.keys(this._charactersById);   //lista de personajes de 0 a 5 (solo nombres)
     var listChara = document.querySelectorAll('.character-list');
     var heroesList = listChara[0];
     var monstersList = listChara [1];
@@ -48,8 +48,10 @@ battle.on('turn', function (data) {
     monstersList.innerHTML = "";
     for (var i in list){
         aux = this._charactersById[list[i]];
+        //console.log (aux);
         var render = '<li data-chara- id="'+list[i]+'">'+aux.name+'(HP: <strong>'+aux.hp+'</strong>/'+aux.maxHp+', MP: <strong>'+aux.mp+'</strong>/'+aux.maxMp+')</li>';
-    
+    if (aux._hp === 0)
+         render = '<li data-chara- id="'+list[i]+'" style="text-decoration:line-through;">'+aux.name+'(HP: <strong>'+aux.hp+'</strong>/'+aux.maxHp+', MP: <strong>'+aux.mp+'</strong>/'+aux.maxMp+')</li>';
      if (aux.party === 'heroes'){
 
          heroesList.innerHTML += render;
@@ -60,7 +62,11 @@ battle.on('turn', function (data) {
         monstersList.innerHTML += render;
     
        }
+
+
 }
+    var dead = document.querySelector('#' + data._charactersById);
+   
    
     // TODO: highlight current character
     var active = document.querySelector('#' + data.activeCharacterId);
@@ -235,4 +241,11 @@ window.onload = function () {
         radio.innerHTML = i;
         actions.appendChild(input);
         actions.appendChild(radio);
+        */
+
+        /* AÑADIR ESTO AL styles.css en dead (suma más puntos)
+        background: rgba(254, 0, 0, 0.5);
+        .dead::before {
+            content: "T_T";
+}       }
         */

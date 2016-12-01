@@ -61,6 +61,11 @@ button, input, select {
 
 .dead {
     text-decoration: line-through;
+    background: rgba(254, 0, 0, 0.5);
+}
+
+.dead::before {
+    content: "T_T";
 }
 
 .active {
