@@ -48,29 +48,29 @@ battle.on('turn', function (data) {
     monstersList.innerHTML = "";
     for (var i in list){
         aux = this._charactersById[list[i]];
-        //console.log (aux);
         var render = '<li data-chara- id="'+list[i]+'">'+aux.name+'(HP: <strong>'+aux.hp+'</strong>/'+aux.maxHp+', MP: <strong>'+aux.mp+'</strong>/'+aux.maxMp+')</li>';
+
     if (aux._hp === 0)
-         render = '<li data-chara- id="'+list[i]+'" style="text-decoration:line-through;">'+aux.name+'(HP: <strong>'+aux.hp+'</strong>/'+aux.maxHp+', MP: <strong>'+aux.mp+'</strong>/'+aux.maxMp+')</li>';
-     if (aux.party === 'heroes'){
+        render = '<li data-chara- id="'+list[i]+'" style="text-decoration:line-through;">'+aux.name+'(HP: <strong>'+aux.hp+'</strong>/'+aux.maxHp+', MP: <strong>'+aux.mp+'</strong>/'+aux.maxMp+')</li>';
 
-         heroesList.innerHTML += render;
-        
+     if (aux.party === 'heroes') {
+        heroesList.innerHTML += render;
        }
+
        else {
-        
         monstersList.innerHTML += render;
-    
        }
-
 
 }
-    var dead = document.querySelector('#' + data._charactersById);
-   
-   
+
+    // Dead Character
+    //var dead = document.getElementById(que va aquí);
+    //dead.classList.add('dead');  
+    
     // TODO: highlight current character
-    var active = document.querySelector('#' + data.activeCharacterId);
+    var active = document.getElementById(data.activeCharacterId);
     active.classList.add('active');
+    
     
     // TODO: show battle actions form
     actionForm.style.display = 'inline';
@@ -150,7 +150,30 @@ battle.on('end', function (data) {
     console.log('END', data);
     
     // TODO: re-render the parties so the death of the last character gets reflected
+    var list = Object.keys(this._charactersById); 
+    var listChara = document.querySelectorAll('.character-list');
+    var heroesList = listChara[0];
+    var monstersList = listChara [1];
+    var aux;
+    heroesList.innerHTML = "";
+    monstersList.innerHTML = "";
+    for (var i in list){
+        aux = this._charactersById[list[i]];
+        var render = '<li data-chara- id="'+list[i]+'">'+aux.name+'(HP: <strong>'+aux.hp+'</strong>/'+aux.maxHp+', MP: <strong>'+aux.mp+'</strong>/'+aux.maxMp+')</li>';
+    if (aux._hp === 0)
+         render = '<li data-chara- id="'+list[i]+'" style="text-decoration:line-through;">'+aux.name+'(HP: <strong>'+aux.hp+'</strong>/'+aux.maxHp+', MP: <strong>'+aux.mp+'</strong>/'+aux.maxMp+')</li>';
+     if (aux.party === 'heroes'){
+         heroesList.innerHTML += render;   
+       }
+       else { 
+        monstersList.innerHTML += render;
+       }
+}
     // TODO: display 'end of battle' message, showing who won
+    infoPanel.style.display = 'inline';
+    infoPanel.innerHTML = "";
+    var render = 'Battle is over! Winners were: <strong>';//+aux.party saca solo Monsters
+    infoPanel.innerHTML += render;
 });
 
 window.onload = function () {
@@ -248,4 +271,6 @@ window.onload = function () {
         .dead::before {
             content: "T_T";
 }       }
+        falta añadir el winner, quitar los muertos de target y arreglar dead
+
         */
