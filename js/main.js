@@ -51,7 +51,7 @@ battle.on('turn', function (data) {
         var render = '<li data-chara- id="'+list[i]+'">'+aux.name+'(HP: <strong>'+aux.hp+'</strong>/'+aux.maxHp+', MP: <strong>'+aux.mp+'</strong>/'+aux.maxMp+')</li>';
 
     if (aux._hp === 0)
-        render = '<li data-chara- id="'+list[i]+'" style="text-decoration:line-through;">'+aux.name+'(HP: <strong>'+aux.hp+'</strong>/'+aux.maxHp+', MP: <strong>'+aux.mp+'</strong>/'+aux.maxMp+')</li>';
+        render = '<li data-chara- id="'+list[i]+'" class = "dead">'+aux.name+'(HP: <strong>'+aux.hp+'</strong>/'+aux.maxHp+', MP: <strong>'+aux.mp+'</strong>/'+aux.maxMp+')</li>';
 
      if (aux.party === 'heroes') {
         heroesList.innerHTML += render;
@@ -161,7 +161,7 @@ battle.on('end', function (data) {
         aux = this._charactersById[list[i]];
         var render = '<li data-chara- id="'+list[i]+'">'+aux.name+'(HP: <strong>'+aux.hp+'</strong>/'+aux.maxHp+', MP: <strong>'+aux.mp+'</strong>/'+aux.maxMp+')</li>';
     if (aux._hp === 0)
-         render = '<li data-chara- id="'+list[i]+'" style="text-decoration:line-through;">'+aux.name+'(HP: <strong>'+aux.hp+'</strong>/'+aux.maxHp+', MP: <strong>'+aux.mp+'</strong>/'+aux.maxMp+')</li>';
+         render = '<li data-chara- id="'+list[i]+'"class = "dead">'+aux.name+'(HP: <strong>'+aux.hp+'</strong>/'+aux.maxHp+', MP: <strong>'+aux.mp+'</strong>/'+aux.maxMp+')</li>';
      if (aux.party === 'heroes'){
          heroesList.innerHTML += render;   
        }
@@ -172,7 +172,7 @@ battle.on('end', function (data) {
     // TODO: display 'end of battle' message, showing who won
     infoPanel.style.display = 'inline';
     infoPanel.innerHTML = "";
-    var render = 'Battle is over! Winners were: <strong>';//+aux.party saca solo Monsters
+    var render = 'Battle is over! Winners were: <strong>' + data.winner;//+aux.party saca solo Monsters
     infoPanel.innerHTML += render;
 });
 
