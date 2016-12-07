@@ -62,11 +62,6 @@ battle.on('turn', function (data) {
        }
 
 }
-
-    // Dead Character
-    //var dead = document.getElementById(que va aquí);
-    //dead.classList.add('dead');  
-    
     // TODO: highlight current character
     var active = document.getElementById(data.activeCharacterId);
     active.classList.add('active');
@@ -86,11 +81,7 @@ battle.on('turn', function (data) {
     targetForm.style.display = 'none';
     var targets = targetForm.querySelector('.choices');
     targets.innerHTML = "";
-    //this._charactersById
     var char = this._charactersById;
-     //cambiar esto para que salga lo de showTargets
-    //console.log(this._turns.list.filter(this._charactersById.isAlive()));
-   
     for(var i in char){
          var render = '<li><label><input type="radio" name="target" value="'+i+'" required> '+i+'</label></li>';
          targets.innerHTML += render;
@@ -188,11 +179,9 @@ window.onload = function () {
         // TODO: select the action chosen by the player
         var action = actionForm.elements['option'].value;
         battle.options.select(action);
-        
-       // console.log(action);
 
         // TODO: hide this menu
-       //
+       
         // TODO: go to either select target menu, or to the select spell menu
          if(action === 'cast'){
              actionForm.style.display = 'none';
@@ -255,22 +244,3 @@ window.onload = function () {
 
     battle.start();
 };
- /*var radio = document.createElement('label');
-        var input = document.createElement('input');
-        input.type = "radio";
-        input.name = "option";
-        input.value = i;
-        input.required = true;
-        radio.innerHTML = i;
-        actions.appendChild(input);
-        actions.appendChild(radio);
-        */
-
-        /* AÑADIR ESTO AL styles.css en dead (suma más puntos)
-        background: rgba(254, 0, 0, 0.5);
-        .dead::before {
-            content: "T_T";
-}       }
-        falta añadir el winner, quitar los muertos de target y arreglar dead
-
-        */
